@@ -33,6 +33,9 @@ const getters = {
     },
     trademarkList(state){
         return state.reqSearch.trademarkList || []
+    },
+    total(state){
+        return state.reqSearch.total || undefined
     }
 };
 export default {

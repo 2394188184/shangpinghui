@@ -10,37 +10,31 @@
               <a href="#">全部结果</a>
             </li>
           </ul>
-          <ul class="fl sui-tag" v-show="searchParams.categoryName">
+          <ul class="fl sui-tag" >
             <!-- 商品分类面包屑地方 -->
-            <li class="with-x">{{searchParams.categoryName}}<i @click="cleanSign">×</i></li>
+            <li v-show="searchParams.categoryName" class="with-x">{{searchParams.categoryName}}<i @click="cleanSign">×</i></li>
+            <!-- 关键字面包屑 -->
+            <li v-show="searchParams.keyword" class="with-x">{{searchParams.keyword}}<i @click="cleankeyword">×</i></li>
+            <!-- 品牌的面包屑 -->
+            <li v-show="searchParams.trademark" class="with-x">{{searchParams.trademark?searchParams.trademark.split(":")[1]:undefined}}<i @click="cleantrademark">×</i></li>
+            <!-- 平台售卖属性面包屑 -->
+            <li v-for="(item,index) in searchParams.props" :key="index" class="with-x">{{item.split(":")[1]}}<i @click="cleanattrInfo(index)">×</i></li>
           </ul>
         </div>
 
         <!--selector-->
-        <SearchSelector />
+        <SearchSelector @trademark = 'trademark'  @attrInfo="attrInfo"/>
 
         <!--details-->
         <div class="details clearfix">
           <div class="sui-navbar">
             <div class="navbar-inner filter">
               <ul class="sui-nav">
-                <li class="active">
-                  <a href="#">综合</a>
+                <li :class="{active:searchParams.order.includes('1')}" @click="clickOrder(1)">
+                  <a>综合<span v-show="searchParams.order.includes('1')" class="iconfont" :class="searchParams.order.includes('asc')?'icon-UP':'icon-DOWN'"></span></a>
                 </li>
-                <li>
-                  <a href="#">销量</a>
-                </li>
-                <li>
-                  <a href="#">新品</a>
-                </li>
-                <li>
-                  <a href="#">评价</a>
-                </li>
-                <li>
-                  <a href="#">价格⬆</a>
-                </li>
-                <li>
-                  <a href="#">价格⬇</a>
+                <li :class="{active:searchParams.order.includes('2')}" @click="clickOrder(2)">
+                  <a>价格<span v-show="searchParams.order.includes('2')" class="iconfont" :class="searchParams.order.includes('asc')?'icon-UP':'icon-DOWN'"></span></a>
                 </li>
               </ul>
             </div>
@@ -72,35 +66,14 @@
               </li>
             </ul>
           </div>
-          <div class="fr page">
-            <div class="sui-pagination clearfix">
-              <ul>
-                <li class="prev disabled">
-                  <a href="#">«上一页</a>
-                </li>
-                <li class="active">
-                  <a href="#">1</a>
-                </li>
-                <li>
-                  <a href="#">2</a>
-                </li>
-                <li>
-                  <a href="#">3</a>
-                </li>
-                <li>
-                  <a href="#">4</a>
-                </li>
-                <li>
-                  <a href="#">5</a>
-                </li>
-                <li class="dotted"><span>...</span></li>
-                <li class="next">
-                  <a href="#">下一页»</a>
-                </li>
-              </ul>
-              <div><span>共10页&nbsp;</span></div>
-            </div>
-          </div>
+          <!-- 分页器 -->
+          <!-- 
+              pageNo:当前第几页
+              pageSize:代表每一页展示多少条数据
+              total:代表总条数
+              continues:代表分页连续页码个数
+           -->
+          <Pagination  @updatePageNo="updatePageNo" :pageNo="Number(searchParams.pageNo)" :pageSize="Number(searchParams.pageSize)" :total ="Number(total)" :continues="Number(5)"></Pagination>
         </div>
       </div>
     </div>
@@ -123,9 +96,9 @@
           keyword:'',//关键字
           props:[],//商品属性的数组
           trademark:'',//品牌
-          order:'',//排序
+          order:'1:desc',//排序默认是综合降序
           pageNo:1, //页码
-          pageSize:10 //每一页显示条数
+          pageSize:3 //每一页显示条数
         }
       }
     },
@@ -155,20 +128,73 @@
     },
     computed:{
         ...mapState({reqSearch:store =>store.search.reqSearch}),
-        ...mapGetters({attrsList:'attrsList',goodsList:'goodsList',trademarkList:'trademarkList'})
+        ...mapGetters({attrsList:'attrsList',goodsList:'goodsList',trademarkList:'trademarkList',total:'total'})
     },
     methods:{
         //获取search页面的属性
         getSearchList(){
           this.$store.dispatch('reqSearch',this.searchParams)
         },
-        //清除面包屑
+        //清除分类面包屑
         cleanSign(){
             //清除分类名称
             this.searchParams.categoryName = undefined;
             // this.getSearchList(); 不重新发请求的原因是你的$route改变了
             this.$router.push({name:'search',params:this.$route.params})
+        },
+        //清除关键字面包屑
+        cleankeyword(){
+           this.searchParams.keyword = undefined;
+           //清除搜索框的数据（兄弟组件的通信用$bus）
+           this.$bus.$emit('cleanKeyWord')
+           this.$router.push({name:'search',query:this.$route.query})
+        },
+        //获取从子组件传递过来的trademark数据（品牌数据）
+        trademark(trademark){
+          // console.log(trademark)
+          this.searchParams.trademark = `${trademark.tmId}:${trademark.tmName}`
+          this.getSearchList();
+        },
+        //清除品牌的面包屑（trademark）
+        cleantrademark(){
+          this.searchParams.trademark = undefined;
+          this.getSearchList();
+        },
+        //获取从子组件传递过来的平台售卖属性（props）
+        attrInfo(attr,attrValue){
+            let props = `${attr.attrId}:${attrValue}:${attr.attrName}`
+            //数组去重(indexof查找是否存在重复)
+            if(this.searchParams.props.indexOf(props) == -1){
+              this.searchParams.props.push(props)
+            }
+            this.getSearchList();
+        },
+        //清除平台售卖属性面包屑
+        cleanattrInfo(index){
+          //清除当前下标的数组
+          this.searchParams.props.splice(index,1)
+          this.getSearchList();
+        },
+        //排序
+       clickOrder(flag){
+        let newValue = ''  //新的order值
+        //当前没切换flag
+        if(flag == this.searchParams.order.split(':')[0]){
+          let oldValue = this.searchParams.order.split(':')[1]
+          newValue = `${flag}:${oldValue =="desc"?'asc':'desc'}`
+        }else{
+          //切换flag默认降序
+          newValue = `${flag}:desc`
         }
+        this.searchParams.order = newValue
+        this.getSearchList()
+       },
+       //更新pageNo
+       updatePageNo(pageNo){
+        this.searchParams.pageNo = pageNo
+        //重新发起请求
+        this.getSearchList();
+       }
     }, 
     watch:{
       $route:{

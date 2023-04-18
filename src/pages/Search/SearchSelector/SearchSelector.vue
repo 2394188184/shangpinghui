@@ -4,7 +4,7 @@
       <div class="fl key brand">品牌</div>
       <div class="value logos">
         <ul class="logo-list">
-          <li v-for="item in trademarkList" :key="item.id">{{item.tmName}}</li>
+          <li v-for="item in trademarkList" :key="item.id" @click="clicktrademark(item)">{{item.tmName}}</li>
         </ul>
       </div>
       <div class="ext">
@@ -16,7 +16,7 @@
       <div class="fl key">{{item1.attrName}}</div>
       <div class="fl value">
         <ul class="type-list">
-          <li v-for="(item2,index) in item1.attrValueList" :key="index">
+          <li v-for="(item2,index) in item1.attrValueList" :key="index" @click="attrInfo(item1,item2)">
             <a>{{item2}}</a>
           </li>
         </ul>
@@ -32,6 +32,19 @@ import { mapGetters} from 'vuex';
     name: 'SearchSelector',
     computed:{
       ...mapGetters({attrsList:'attrsList',trademarkList:'trademarkList'})
+    },
+    methods:{
+      //点击品牌
+      clicktrademark(trademark){
+        // console.log(trademark)
+        //要将数据传到父子间用$emit +自定义事件
+        this.$emit('trademark',trademark)
+      },
+      //平台售卖属性面包屑
+      attrInfo(attr,attrValue){
+        //将数据传到父组件
+        this.$emit('attrInfo',attr,attrValue)
+      }
     }
   }
 </script>

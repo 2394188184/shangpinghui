@@ -4,6 +4,7 @@ import App from './App.vue'
 import router from '@/router/index.js'
 //全局注册组件
 import TypeNav from '@/components/TypeNav/index.vue'
+import Pagination from '@/components/Pagination/index.vue'
 //引入store
 import store from '@/store/index.js'
 //引入mock的假数据
@@ -13,8 +14,12 @@ import 'swiper/css/swiper.min.css'
 import  {reqCategoryList,reqBanner} from '@/api/index.js'
 Vue.config.productionTip = false
 Vue.component('TypeNav',TypeNav)
+Vue.component('Pagination',Pagination)
 new Vue({
   render: h => h(App),
   router,
-  store
+  store,
+  beforeCreate(){
+    Vue.prototype.$bus = this  //安装全局事件总线
+  }
 }).$mount('#app')

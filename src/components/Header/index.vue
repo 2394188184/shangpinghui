@@ -60,6 +60,10 @@ export default {
             }
            this.$router.push({name:'search',query,params:{keyWord:this.keyWord}})
         }
+    },
+    mounted(){
+        //将搜索框赋值为空
+        this.$bus.$on("cleanKeyWord",()=>{this.keyWord = ''})
     }
 }
 </script>
