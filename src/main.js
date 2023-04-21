@@ -15,11 +15,14 @@ import  {reqCategoryList,reqBanner} from '@/api/index.js'
 Vue.config.productionTip = false
 Vue.component('TypeNav',TypeNav)
 Vue.component('Pagination',Pagination)
+import request from '@/api/request'
 new Vue({
   render: h => h(App),
   router,
   store,
   beforeCreate(){
     Vue.prototype.$bus = this  //安装全局事件总线
+  },
+  mounted(){
   }
 }).$mount('#app')
