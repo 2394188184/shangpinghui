@@ -12,6 +12,10 @@ import '@/mock/index.js'
 //引入swiper的样式
 import 'swiper/css/swiper.min.css'
 import  {reqCategoryList,reqBanner} from '@/api/index.js'
+//引入elementUI
+import 'element-ui/lib/theme-chalk/index.css';
+import ElementUI from 'element-ui';
+Vue.use(ElementUI);
 Vue.config.productionTip = false
 Vue.component('TypeNav',TypeNav)
 Vue.component('Pagination',Pagination)

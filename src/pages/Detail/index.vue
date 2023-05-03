@@ -379,6 +379,13 @@
         try{
           let result =await this.$store.dispatch('addToCart',{skuId:this.$route.query.skuId,skuNum:this.buyNumber})
           if(result =='ok'){
+            //路由跳转到添加购物车页面并且携带参数
+            /*
+              因为数据比较复杂，使用query会造成路径错误等问题，所以使用会话存储进行保存数据
+              SessionStrage:会随着窗体的关闭而关闭
+            */
+            sessionStorage.setItem('skuInfo',JSON.stringify(this.skuInfo))
+            this.$router.push({name:'AddCartSuccess',query:{skuNum:this.buyNumber}})
           }
         }catch(e){
           console.log(e)

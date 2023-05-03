@@ -31,3 +31,15 @@ export const reqPhoneConfig = ()=>{
 export const reqAddToCart = (skuId,skuNum)=>{
     return request({url:`/cart/addToCart/${skuId}/${skuNum}`,method:'post'})
 }
+//获取购物车列表数据
+export const reqCartList = ()=>{
+    return request({url:'/cart/cartList',method:'get'})
+}
+//删除购物车数据
+export const delCartList = (skuId)=>{
+    return request({url:`/cart/deleteCart/${skuId}`,method:'delete'})
+}
+//切换购物车勾选框功能
+export const checkCat = (skuId,isChecked)=>{
+    return request({url:`/cart/checkCart/${skuId}/${isChecked}`,method:'get'})
+}
