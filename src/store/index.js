@@ -6,12 +6,15 @@ import search from '@/store/search/index.js'
 import detail from '@/store/detail/index.js'
 //引入Cart【购物车】仓库
 import cart from '@/store/cart/index.js'
+//引入user【登录与注册】仓库
+import user from '@/store/user/index.js'
 Vue.use(Vuex);
 export default new Vuex.Store({
     modules:{
         home,
         search,
         detail,
-        cart
+        cart,
+        user
     }
 })

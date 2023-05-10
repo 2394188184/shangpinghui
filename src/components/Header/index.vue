@@ -7,10 +7,14 @@
                 <div class="container">
                     <div class="loginList">
                         <p>尚品汇欢迎您！</p>
-                        <p>
+                        <p v-if="!name">
                             <span>请</span>
                             <router-link to="/login">登录&nbsp;|&nbsp;</router-link>
                             <router-link to="/register">免费注册</router-link>
+                        </p>
+                        <p v-else>
+                            {{name}}&nbsp;|&nbsp;
+                            <span @click="loginOut">退出登录</span>
                         </p>
                     </div>
                     <div class="typeList">
@@ -45,6 +49,7 @@
 </template>
 
 <script type="text/javascript">
+import { mapGetters } from 'vuex'
 export default {
     data(){
         return{
@@ -59,11 +64,24 @@ export default {
                 query = this.$route.query
             }
            this.$router.push({name:'search',query,params:{keyWord:this.keyWord}})
+        },
+        //
+        async loginOut(){
+            //退出登录
+            try{
+                await this.$store.dispatch('loginOut')
+                this.$router.push('/login')
+            }catch(e){
+                alert(e)
+            }
         }
     },
     mounted(){
         //将搜索框赋值为空
         this.$bus.$on("cleanKeyWord",()=>{this.keyWord = ''})
+    },
+    computed:{
+        ...mapGetters({name:'name'}),
     }
 }
 </script>

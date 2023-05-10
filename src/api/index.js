@@ -43,3 +43,26 @@ export const delCartList = (skuId)=>{
 export const checkCat = (skuId,isChecked)=>{
     return request({url:`/cart/checkCart/${skuId}/${isChecked}`,method:'get'})
 }
+/* 
+    用户注册与登录
+*/
+//获取验证码
+export const getCode = (phone)=>{
+     return request({url:`/user/passport/sendCode/${phone}`,method:'get'})
+}
+//注册接口
+export const reqUserRegister = (data)=>{
+    return request({url:'user/passport/register',method:'post',data:data})
+}
+//获取登录接口
+export const reqUserLogin = (data)=>{
+    return request({url:'user/passport/login',method:'post',data})
+}
+//获取用户数据
+export const reqGetUserInfo = () =>{
+    return request({url:'user/passport/auth/getUserInfo',method:'get'})
+}
+//退出登录
+export const reqLoginOut = ()=>{
+    return request({url:'user/passport/logout',method:'get'})
+}
