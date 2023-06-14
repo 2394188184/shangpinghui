@@ -8,8 +8,61 @@ import Detail from '@/pages/Detail/index.vue'
 import AddCartSuccess from '@/pages/AddCartSuccess/index.vue'
 //引入ShopCart【展示购物车】页面
 import ShopCart from '@/pages/ShopCart/index.vue'
+//引入结算页面【trade】页面
+import trade from '@/pages/Trade/index.vue'
+//引入支付页面【Pay】页面
+import Pay from '@/pages/Pay/index.vue'
+//引入支付成功页面【paySuccess】
+import paySuccess from '@/pages/PaySuccess/index.vue'
+//引入个人中心页面【center】
+import center from '@/pages/Center/index.vue'
+//引入个人中心页面【center】的二级路由【myOrder】【groupOrder】
+import myOrder from '@/pages/Center/myOrder/index.vue'
+import groupOrder from '@/pages/Center/groupOrder/index.vue'
 //默认暴露一个数组
 export default [
+    //个人中心页面
+    {
+        name:'center',
+        path:'/center',
+        component:center,
+        meta:{isShow:true},
+        children:[
+            {
+                name:'myOrder',
+                path:'myOrder',
+                component:myOrder
+            },{
+                name:'groupOrder',
+                path:'groupOrder',
+                component:groupOrder
+            },{
+                path:'/center',
+                redirect:'/center/myOrder'
+            }
+        ]
+    },
+    //支付成功页面
+    {
+        name:'paySuccess',
+        path:'/paySuccess',
+        component:paySuccess,
+        meta:{isShow:true}
+    },
+    //支付页面
+    {
+        name:'pay',
+        path:'/pay',
+        component:Pay,
+        meta:{isShoe:true}
+    },
+    //结算页面
+    {
+        name:'trade',
+        path:'/trade',
+        component:trade,
+        meta:{isShoe:true}
+    },
      //展示购物车页面
     {
         name:'ShopCart',

@@ -11,21 +11,32 @@ import store from '@/store/index.js'
 import '@/mock/index.js'
 //引入swiper的样式
 import 'swiper/css/swiper.min.css'
-import  {reqCategoryList,reqBanner} from '@/api/index.js'
 //引入elementUI
-import 'element-ui/lib/theme-chalk/index.css';
-import ElementUI from 'element-ui';
-Vue.use(ElementUI);
+import {Button,MessageBox,Message} from 'element-ui';
+Vue.component(Button.name, Button);
+Vue.prototype.$msgbox = MessageBox;
+Vue.prototype.$alert = MessageBox.alert;
+Vue.prototype.$message = Message;
+// import 'element-ui/lib/theme-chalk/index.css';
+// import ElementUI from 'element-ui';
+// Vue.use(ElementUI);
+// 图片懒加载
+import VueLazyload from 'vue-lazyload'
+import loadimage from '@/assets/images/1.jpg' 
+Vue.use(VueLazyload, {
+  loading: loadimage,
+})
 Vue.config.productionTip = false
 Vue.component('TypeNav',TypeNav)
 Vue.component('Pagination',Pagination)
-import request from '@/api/request'
+import * as API from '@/api'
 new Vue({
   render: h => h(App),
   router,
   store,
   beforeCreate(){
     Vue.prototype.$bus = this  //安装全局事件总线
+    Vue.prototype.$API = API   //安装$API(统一引入)
   },
   mounted(){
   }

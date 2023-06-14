@@ -45,6 +45,7 @@ const actions = {
     //获取token
     async userLogin(context,user){
         let {data} = await reqUserLogin(user)
+        console.log(data)
         if(data.code == 200){
             context.commit('USERLOGIIN',data.data.token)
             //将token放在缓存中，进行持久化

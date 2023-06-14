@@ -26,8 +26,8 @@ router.beforeEach(async (to,from,next)=>{
     let name = store.state.user.userInfo.name
     if(token){
       //登录号不能去登录页面
-      if(to.path =='/login'){
-       next('/home')
+      if(to.path =='/login' && !name){
+       next('/login')
       }else{
         //如果存在登录信息，放行
         //如果不存在登录信息，获取数据后放行

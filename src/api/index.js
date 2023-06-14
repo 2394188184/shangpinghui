@@ -66,3 +66,31 @@ export const reqGetUserInfo = () =>{
 export const reqLoginOut = ()=>{
     return request({url:'user/passport/logout',method:'get'})
 }
+/* 
+    结算页面
+*/
+//  获取用户地址信息
+export const reqUserAdress = ()=>{
+    return request({url:'/user/userAddress/auth/findUserAddressList',method:'get'})
+}
+//获取交易页信息
+export const reqTradeInfo = ()=>{
+    return request({url:'/order/auth/trade',method:'get'})
+}
+/* ----------------------------------支付页面----------------------------------------- */
+//提交订单接口   /api/order/auth/submitOrder?tradeNo={tradeNo}   method:"post"
+export const reqSubmitOrder = (tradeNo,data)=>{
+    return request({url:`order/auth/submitOrder?tradeNo=${tradeNo}`,data,method:'post'})
+}
+//获取订单支付信息   /api/payment/weixin/createNative/{orderId}  mothod:'get'
+export const reqGetPayInfo = (orderId)=>{
+    return request({url:`/payment/weixin/createNative/${orderId}`,method:'get'})
+}
+//获取订单支付状态 /api/payment/weixin/queryPayStatus/{orderId}
+export const reqGetStatus = (orderId)=>{
+    return request({url:`/payment/weixin/queryPayStatus/${orderId}`,method:'get'})
+}
+//获取我的订单列表   /api/order/auth/{page}/{limit}  method:'get'
+export const reqMyOrder = (page,limit) =>{
+    return request({url:`/order/auth/${page}/${limit}`,method:'get'})
+}
