@@ -47,9 +47,11 @@ router.beforeEach(async (to,from,next)=>{
         }
       }
     }
-    //未登录暂未处理
+    //未登录暂未处理(不能交易相关（trade）,支付相关（pay,paysuccess）,用户中心（center）)相关跳转到登录页面
     else{
-
+      if(to.path.indexOf('/trade') != -1 || to.path.indexOf('/pay') != -1  || to.path.indexOf('/center') != -1){
+          next('/login?redirect='+to.path)
+      }
     }
 
 })

@@ -77,9 +77,13 @@
     methods:{
       async userLogin(){
         try{
+          //全局路由守卫，未登录记录想要跳转的地方
+          // console.log(this.$route.query)
           const {phone,password} = this
           await this.$store.dispatch('userLogin',{phone,password})
-          this.$router.push('/home')
+          // this.$router.push('/home')
+          //如果没有带参数默认跳转到/home，如果有带参数跳转到参数的地址
+          this.$router.push(this.$route.query.redirect?this.$route.query.redirect:'/home')
         }catch(e){
           alert(e)
         } 

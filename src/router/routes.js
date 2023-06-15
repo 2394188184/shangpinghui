@@ -47,21 +47,51 @@ export default [
         name:'paySuccess',
         path:'/paySuccess',
         component:paySuccess,
-        meta:{isShow:true}
+        meta:{isShow:true},
+        //独享路由守卫
+        beforeEnter(to, from, next) {
+            //如果是从购物车页面可以到结算页面
+            if(from.path =="/pay"){
+                next()
+            }else{
+                //其他页面跳转不发生变化
+                next(false);
+            }
+        },
     },
     //支付页面
     {
         name:'pay',
         path:'/pay',
         component:Pay,
-        meta:{isShoe:true}
+        meta:{isShoe:true},
+        //独享路由守卫
+        beforeEnter(to, from, next) {
+            //如果是从购物车页面可以到结算页面
+            if(from.path =="/trade"){
+                next()
+            }else{
+                //其他页面跳转不发生变化
+                next(false);
+            }
+        },
     },
     //结算页面
     {
         name:'trade',
         path:'/trade',
         component:trade,
-        meta:{isShoe:true}
+        meta:{isShoe:true},
+        //独享路由守卫
+        beforeEnter(to, from, next) {
+            //如果是从购物车页面可以到结算页面
+            if(from.path =="/ShopCart"){
+                next()
+            }else{
+                //其他页面跳转不发生变化
+                next(false);
+            }
+        },
     },
      //展示购物车页面
     {
